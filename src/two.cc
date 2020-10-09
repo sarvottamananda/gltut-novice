@@ -23,6 +23,14 @@
 #include <stdexcept>
 #include <string>
 
+// Forward declarations, to be defined later, but used before. It is generally good practise to
+// declare all static functions that a file defines, just before the function they are needed,
+// nothing wrong if we declare them several times, as we can then move around functions, without
+// worrying about things breaking.
+
+// callback function, will be set to be called whenever window is resized
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+
 /*
  * main() : This is a beginner's snippet, so in order to highlight important parts of the code,
  * we write everything in one behemoth main function.
@@ -89,16 +97,99 @@ main(int argc, char *argv[])
 	    glfwTerminate();
             // throw error
 	    throw std::runtime_error("Failed to create glfw window.");
-	} else {
-            std::cout << "Window creation : success !!\n";
-        }
+	}
+
+        // 
+	// II. glew stuff
+        //
+
+	// glew is literal glue between opengl (glvnd and mesa) and glfw (glx and xcb), so the
+	// others need to be initialized before glew is initialized.
+
+	// all opengl functions need a context, glew needs to understand the context
+	glfwMakeContextCurrent(win);
+
+	// initialize glew
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK) {
+	    glfwTerminate();
+            // throw error
+	    throw std::runtime_error("Failed to initialize glew.");
+	}
+
+	// get version info to see if our hinting was successful
+	const GLubyte *renderer = glGetString(GL_RENDERER);
+	const GLubyte *version = glGetString(GL_VERSION);
+
+        // what is the opengl driver
+	std::cout << "Renderer: " << renderer << std::endl;
+        // and the opengl version that it provides
+	std::cout << "OpenGL version supported " << version << std::endl;
+
+	// callback uses glViewport, so it can only by set after the context has
+	// been created
+	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
+
+        // 
+	// V. Rendering
+	//
+
+	// black background, even the alpha is set to 0
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	// Value 0 is for no vsync, and 1 for vsync, it is integral value of required number of
+	// display refreshes before we swap. Doesn't matter as we are not drawing realtime.
+	glfwSwapInterval(0);
+
+	// render loop
+	while (!glfwWindowShouldClose(win)) {
+	    // render
+
+	    // foremost we clear the screen, otherwise it is tricky to redraw only the changed
+	    // parts of the screen
+	    glClear(GL_COLOR_BUFFER_BIT);
+
+	    // swap buffers and poll IO events (keys pressed/released, mouse moved
+	    // etc.)
+	    glfwSwapBuffers(win);
+
+	    // Either we poll for the events (immediately returns) or we wait for the events
+	    // (waits), we are not doing realtime so we wait.
+
+	    glfwWaitEvents();
+	    // glfwPollEvents();
+
+	    // process input
+	    if (glfwGetKey(win, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(win, true);
+	}
 
 	// terminate glfw, clearing all previously allocated GLFW resources
 	glfwTerminate();
+
+        std::cout << "Window clear : success!!\n";
 	return 0;
     }
     catch (std::exception &ex) {
 	std::cerr << ex.what() << std::endl;
 	return 1;
     }
+}
+
+/* 
+ * framebuffer_size_callback() : whenever the window size changed (by the system/user
+ * intervention) this function gets called
+ *
+ * win : window that made the callback call
+ * wid, hgt : new sizes
+ */
+
+static void
+framebuffer_size_callback(GLFWwindow *win, int wid, int hgt)
+{
+    // make sure the viewport matches the new window dimensions;
+
+    // note that width and height will be significantly larger than specified on retina
+    // displays.
+    glViewport(0, 0, wid, hgt);
 }

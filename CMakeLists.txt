@@ -10,7 +10,7 @@ project (simple-gl-snippets VERSION 0.1 LANGUAGES CXX)
 # Globals
 #
 
-set(CMAKE_VERBOSE_MAKEFILE 1)
+#set(CMAKE_VERBOSE_MAKEFILE 1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -62,17 +62,24 @@ set(all_libs
     ${EXTRA_LIBS}
 )
 
-set(all_srcs)
+set(all_srcs 
+    src/opengl_stuff.cc 
+    src/opengl_stuff.h
+)
 
+add_executable(zero src/zero.cc)
+add_executable(one src/one.cc)
+add_executable(two src/two.cc)
+add_executable(three src/three.cc)
+add_executable(four src/four.cc)
+add_executable(five src/five.cc)
+add_executable(final src/five.cc ${all_srcs})
 
-
-add_executable(one src/one.cc ${all_srcs})
-
-set_property(TARGET one PROPERTY CXX_STANDARD 17)
-set_property(TARGET one PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET one PROPERTY CXX_EXTENSIONS OFF)
-set_property(TARGET one APPEND PROPERTY COMPILE_DEFINITIONS GLM_ENABLE_EXPERIMENTAL=1)
-set_property(TARGET one APPEND PROPERTY LINK_LIBRARIES ${all_libs})
+set_property(TARGET zero one two three four five final PROPERTY CXX_STANDARD 17)
+set_property(TARGET zero one two three four five final PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET zero one two three four five final PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET zero one two three four five final APPEND PROPERTY COMPILE_DEFINITIONS GLM_ENABLE_EXPERIMENTAL=1)
+set_property(TARGET zero one two three four five final APPEND PROPERTY LINK_LIBRARIES ${all_libs})
 
 
 if (APPLE)
@@ -84,13 +91,13 @@ if (MSVC)
 endif (MSVC)
 
 if (UNIX)
-    set_property(TARGET one APPEND PROPERTY COMPILE_OPTIONS -Wall)
+    set_property(TARGET zero one two three four five final APPEND PROPERTY COMPILE_OPTIONS -Wall)
 endif (UNIX)
 
-add_custom_target(run
-    COMMAND one
-    DEPENDS one
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+#add_custom_target(run
+#COMMAND one
+#DEPENDS one
+#WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#)
 
 
