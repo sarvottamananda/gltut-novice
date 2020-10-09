@@ -1,14 +1,15 @@
-/* 
+/*
  * Sarvottamananda (shreesh)
  * 2020-10-09
  * orig.cc v0.0 (OpenGL Code Snippets)
  *
  * Simple OpenGL code snippet using GLEW, GLFW3 and glm
  *
- * comments style : short comments are lowercase, long comments have semi-proper grammar. 
+ * comments style : short comments are lowercase, long comments have semi-proper grammar.
  */
 
-// include glew.h before glfw.h, as glfw will know that it has to prepare for glew (and not vulkan)
+// include glew.h before glfw.h, as glfw will know that it has to prepare for glew (and not
+// vulkan)
 
 // opengl extension wrangler : for opengl functions
 // clang-format off
@@ -32,9 +33,9 @@ int
 main(int argc, char *argv[])
 {
     try {
-        //
+	//
 	// I. glfw stuff
-        //
+	//
 
 	// initialize and configure glfw
 	if (!glfwInit()) {

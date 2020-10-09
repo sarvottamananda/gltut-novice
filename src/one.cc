@@ -1,14 +1,15 @@
-/* 
+/*
  * Sarvottamananda (shreesh)
  * 2020-10-09
  * orig.cc v0.0 (OpenGL Code Snippets)
  *
  * Simple OpenGL code snippet using GLEW, GLFW3 and glm
  *
- * comments style : short comments are lowercase, long comments have semi-proper grammar. 
+ * comments style : short comments are lowercase, long comments have semi-proper grammar.
  */
 
-// include glew.h before glfw.h, as glfw will know that it has to prepare for glew (and not vulkan)
+// include glew.h before glfw.h, as glfw will know that it has to prepare for glew (and not
+// vulkan)
 
 // opengl extension wrangler : for opengl functions
 // clang-format off
@@ -42,8 +43,8 @@ main(int argc, char *argv[])
 
     // Settings for opengl version, since we are not using any new opengl functions we settle
     // for bare minimum with good shader support. I did not check, but we must be using some 3.2
-    // feature, as window  is not created if use opengl 3.1, probably we can create opengl 3.1 window if we use
-    // compatibility mode.
+    // feature, as window  is not created if use opengl 3.1, probably we can create opengl 3.1
+    // window if we use compatibility mode.
 
     // requebst opengl 3.2, honoured only if device supports it, we need to check after creating
     // window, what we have got
@@ -51,16 +52,16 @@ main(int argc, char *argv[])
     const int minor_version = 2;
 
     try {
-        //
+	//
 	// I. glfw stuff
-        //
+	//
 
 	// initialize and configure glfw
 	if (!glfwInit()) {
 	    throw std::runtime_error("Failed to initialize glfw.");
 	}
 
-        // Now we specify what kind of window we want
+	// Now we specify what kind of window we want
 
 	// require opengl version 3.2
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major_version);
@@ -73,7 +74,8 @@ main(int argc, char *argv[])
 	// GLFW_OPENGL_PROFILE:GLFW_OPENGL_COMPATIBILITY_PROFILE and
 	// GLFW_OPENGL_FORWARD_COMPAT:GL_FALSE
 
-	// require opengl core profile, not the compatibility profile, will disable older versions
+	// require opengl core profile, not the compatibility profile, will disable older
+	// versions
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// will disable deprecated features in the requested core profile, that are not in the
@@ -87,11 +89,12 @@ main(int argc, char *argv[])
 	GLFWwindow *win = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 	if (!win) {
 	    glfwTerminate();
-            // throw error
+	    // throw error
 	    throw std::runtime_error("Failed to create glfw window.");
-	} else {
-            std::cout << "Window creation : success !!\n";
-        }
+	}
+	else {
+	    std::cout << "Window creation : success !!\n";
+	}
 
 	// terminate glfw, clearing all previously allocated GLFW resources
 	glfwTerminate();

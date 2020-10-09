@@ -1,14 +1,15 @@
-/* 
+/*
  * Sarvottamananda (shreesh)
  * 2020-10-09
  * orig.cc v0.0 (OpenGL Code Snippets)
  *
  * Simple OpenGL code snippet using GLEW, GLFW3 and glm
  *
- * comments style : short comments are lowercase, long comments have semi-proper grammar. 
+ * comments style : short comments are lowercase, long comments have semi-proper grammar.
  */
 
-// include glew.h before glfw.h, as glfw will know that it has to prepare for glew (and not vulkan)
+// include glew.h before glfw.h, as glfw will know that it has to prepare for glew (and not
+// vulkan)
 
 // opengl extension wrangler : for opengl functions
 // clang-format off
@@ -27,9 +28,6 @@
 // declare all static functions that a file defines, just before the function they are needed,
 // nothing wrong if we declare them several times, as we can then move around functions, without
 // worrying about things breaking.
-
-// callback function, will be set to be called whenever window is resized
-static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 /*
  * main() : This is a beginner's snippet, so in order to highlight important parts of the code,
@@ -50,8 +48,8 @@ main(int argc, char *argv[])
 
     // Settings for opengl version, since we are not using any new opengl functions we settle
     // for bare minimum with good shader support. I did not check, but we must be using some 3.2
-    // feature, as window  is not created if use opengl 3.1, probably we can create opengl 3.1 window if we use
-    // compatibility mode.
+    // feature, as window  is not created if use opengl 3.1, probably we can create opengl 3.1
+    // window if we use compatibility mode.
 
     // requebst opengl 3.2, honoured only if device supports it, we need to check after creating
     // window, what we have got
@@ -59,16 +57,16 @@ main(int argc, char *argv[])
     const int minor_version = 2;
 
     try {
-        //
+	//
 	// I. glfw stuff
-        //
+	//
 
 	// initialize and configure glfw
 	if (!glfwInit()) {
 	    throw std::runtime_error("Failed to initialize glfw.");
 	}
 
-        // Now we specify what kind of window we want
+	// Now we specify what kind of window we want
 
 	// require opengl version 3.2
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major_version);
@@ -81,7 +79,8 @@ main(int argc, char *argv[])
 	// GLFW_OPENGL_PROFILE:GLFW_OPENGL_COMPATIBILITY_PROFILE and
 	// GLFW_OPENGL_FORWARD_COMPAT:GL_FALSE
 
-	// require opengl core profile, not the compatibility profile, will disable older versions
+	// require opengl core profile, not the compatibility profile, will disable older
+	// versions
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// will disable deprecated features in the requested core profile, that are not in the
@@ -95,13 +94,13 @@ main(int argc, char *argv[])
 	GLFWwindow *win = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 	if (!win) {
 	    glfwTerminate();
-            // throw error
+	    // throw error
 	    throw std::runtime_error("Failed to create glfw window.");
 	}
 
-        // 
+	//
 	// II. glew stuff
-        //
+	//
 
 	// glew is literal glue between opengl (glvnd and mesa) and glfw (glx and xcb), so the
 	// others need to be initialized before glew is initialized.
@@ -113,7 +112,7 @@ main(int argc, char *argv[])
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
 	    glfwTerminate();
-            // throw error
+	    // throw error
 	    throw std::runtime_error("Failed to initialize glew.");
 	}
 
@@ -121,21 +120,17 @@ main(int argc, char *argv[])
 	const GLubyte *renderer = glGetString(GL_RENDERER);
 	const GLubyte *version = glGetString(GL_VERSION);
 
-        // what is the opengl driver
+	// what is the opengl driver
 	std::cout << "Renderer: " << renderer << std::endl;
-        // and the opengl version that it provides
+	// and the opengl version that it provides
 	std::cout << "OpenGL version supported " << version << std::endl;
 
-	// callback uses glViewport, so it can only by set after the context has
-	// been created
-	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
-
-        // 
+	//
 	// V. Rendering
 	//
 
 	// black background, even the alpha is set to 0
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(1.0f, 0.5f, 0.0f, 0.0f);
 
 	// Value 0 is for no vsync, and 1 for vsync, it is integral value of required number of
 	// display refreshes before we swap. Doesn't matter as we are not drawing realtime.
@@ -167,29 +162,11 @@ main(int argc, char *argv[])
 	// terminate glfw, clearing all previously allocated GLFW resources
 	glfwTerminate();
 
-        std::cout << "Window clear : success!!\n";
+	std::cout << "Window clear : success!!\n";
 	return 0;
     }
     catch (std::exception &ex) {
 	std::cerr << ex.what() << std::endl;
 	return 1;
     }
-}
-
-/* 
- * framebuffer_size_callback() : whenever the window size changed (by the system/user
- * intervention) this function gets called
- *
- * win : window that made the callback call
- * wid, hgt : new sizes
- */
-
-static void
-framebuffer_size_callback(GLFWwindow *win, int wid, int hgt)
-{
-    // make sure the viewport matches the new window dimensions;
-
-    // note that width and height will be significantly larger than specified on retina
-    // displays.
-    glViewport(0, 0, wid, hgt);
 }
