@@ -1,0 +1,12 @@
+﻿---
+BasedOnStyle: Google
+IndentWidth: 4
+TabWidth: 8
+UseTab: Always
+---
+Language: Cpp
+BreakBeforeBraces: Stroustrup
+ColumnLimit: 96
+Standard: Auto
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+...
